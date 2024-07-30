@@ -1,6 +1,7 @@
-interface NumberObject {
-  key: string;
-}
+import type { nameICon, NumberObject } from "@/types";
+import { h, defineComponent } from 'vue';
+
+
 export function generateNumbers(length: number, max: number): NumberObject[] {
   if (length > max) {
     throw new Error(
@@ -19,13 +20,20 @@ export function generateNumbers(length: number, max: number): NumberObject[] {
 
   // Convert numbers to objects with keys in format "FFF"
   const result: NumberObject[] = selectedNumbers.map((num) => {
-    let hexValue = generateRandomHex();
+    const hexValue = generateRandomHex();
     return {
-      [hexValue]: num,
+     id : hexValue,  value: num, variant: "hidden" , matched : false
     };
   });
 
-  return result;
+  const copy: NumberObject[] = result.map((obj) => {
+    const hexValue = generateRandomHex();
+    return {
+      ...obj, id : hexValue
+  };
+});
+
+  return shuffleArray([...result, ...copy]);
 }
 
 function shuffleArray<T>(array: T[]): T[] {
@@ -45,3 +53,15 @@ function generateRandomHex() {
 
   return hexValue;
 }
+
+function createElementFromString(elementString : string) {
+  return defineComponent({
+    render() {
+      return h('div', {
+        innerHTML: elementString
+      });
+    }
+  });
+}
+
+export default createElementFromString;

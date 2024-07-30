@@ -12,7 +12,8 @@ const router = createRouter({
     {
       path: '/play',
       name: 'play',
-      component: () => import('../views/PlayView.vue')
+      component: () => import('../views/PlayView.vue'),
+      props: (route) => ({ ...route.query })
     }
   ]
 })

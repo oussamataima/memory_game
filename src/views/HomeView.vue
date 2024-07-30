@@ -1,18 +1,24 @@
 <script setup lang="ts">
 import { ref, watch } from "vue";
 import Button from "@/components/Button.vue";
+import PlayView from "./PlayView.vue";
 
-const theme = ref("numbers");
-const numPlayers = ref(1);
-const grid = ref(4);
+const options = ref({
+  theme: "numbers",
+  numPlayers: 1,
+  grid: 4,
+})
+// const theme = ref("numbers");
+// const numPlayers = ref(1);
+// const grid = ref(4);
 function toggleTheme() {
-  theme.value = theme.value === "numbers" ? "icons" : "numbers";
+  options.value.theme = options.value.theme === "numbers" ? "icons" : "numbers";
 }
 function toggleGrid() {
-  grid.value = grid.value === 4 ? 6 : 4;
+  options.value.grid = options.value.grid === 4 ? 6 : 4;
 }
 function changeNumPlayers(num: number) {
-  numPlayers.value = num;
+  options.value.numPlayers = num;
 }
 </script>
 
@@ -27,33 +33,41 @@ function changeNumPlayers(num: number) {
       <div class="flex flex-col gap-2.5">
         <h2 class="text-blueGray text-[15px] font-bold md:text-xl">Select Theme</h2>
         <div class="flex gap-2.5 md:gap-[30px]">
-          <Button @click="toggleTheme" :selected="theme === 'numbers'">Numbers</Button>
-          <Button @click="toggleTheme" :selected="theme === 'icons'">Icons</Button>
+          <Button @click="toggleTheme" :selected="options.theme=== 'numbers'">Numbers</Button>
+          <Button @click="toggleTheme" :selected="options.theme === 'icons'">Icons</Button>
         </div>
       </div>
       <div class="flex flex-col gap-2.5">
         <h2 class="text-blueGray text-[15px] font-bold md:text-xl">Numbers of Players</h2>
         <div class="flex gap-2.5 md:gap-[20px]">
-          <Button :selected="numPlayers === 1" @click="changeNumPlayers(1)">1</Button>
-          <Button :selected="numPlayers === 2" @click="changeNumPlayers(2)">2</Button>
-          <Button :selected="numPlayers === 3" @click="changeNumPlayers(3)">3</Button>
-          <Button :selected="numPlayers === 4" @click="changeNumPlayers(4)">4</Button>
+          <Button :selected="options.numPlayers === 1" @click="changeNumPlayers(1)">1</Button>
+          <Button :selected="options.numPlayers === 2" @click="changeNumPlayers(2)">2</Button>
+          <Button :selected="options.numPlayers === 3" @click="changeNumPlayers(3)">3</Button>
+          <Button :selected="options.numPlayers === 4" @click="changeNumPlayers(4)">4</Button>
         </div>
       </div>
       <div class="flex flex-col gap-2.5">
         <h2 class="text-blueGray text-[15px] font-bold md:text-xl">Grid Size</h2>
         <div class="flex gap-2.5 md:gap-[30px]">
-          <Button @click="toggleGrid" :selected="grid === 4">4x4</Button>
-          <Button @click="toggleGrid" :selected="grid === 6">6x6</Button>
+          <Button @click="toggleGrid" :selected="options.grid === 4">4x4</Button>
+          <Button @click="toggleGrid" :selected="options.grid === 6">6x6</Button>
         </div>
       </div>
       <div>
         <button
           class="bg-yellowOrange py-3.5 rounded-3xl text-lg md:text-[32px] md:py-5 w-full font-bold text-white hover:bg-[#FFB84A] transition"
-          @click="() => {$router.push('/play')}"
+          @click="$router.push({ name: 'play' , query: {...options} })"
         >
           Start Game
         </button>
+        <!-- <router-link to="/play" :theme="theme" :numPlayers="numPlayers" :grid="grid">
+          <button
+            class="bg-yellowOrange py-3.5 rounded-3xl text-lg md:text-[32px] md:py-5 w-full font-bold text-white hover:bg-[#FFB84A] transition"
+          >
+            Start Game
+          </button>
+        </router-link> -->
+        
       </div>
     </section>
   </main>
