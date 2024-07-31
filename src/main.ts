@@ -10,7 +10,7 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 /* import specific icons */
-import { faFutbol,  faAnchor, faFlask, faSun, faHandSpock, faBug, faMoon, faSnowflake, faLiraSign, faCar } from '@fortawesome/free-solid-svg-icons'
+import { faFutbol,  faAnchor, faFlask, faSun, faHandSpock, faBug, faMoon, faSnowflake, faLiraSign, faCar, faCat, faStar, faHandshake, faFaceSmile, faPizzaSlice, faFire, faBroom, faPlane } from '@fortawesome/free-solid-svg-icons'
 
 
 
@@ -21,7 +21,7 @@ import { faHandSparkles } from '@fortawesome/free-solid-svg-icons/faHandSparkles
 const app = createApp(App)
 
 /* add icons to the library */
-library.add(faFutbol,faAnchor,faFlask,faSun,faHandSpock,faBug,faMoon,faSnowflake,faLiraSign,faCar)
+library.add(faFutbol,faAnchor,faFlask,faSun,faHandSpock,faBug,faMoon,faSnowflake,faLiraSign,faCar,faCat,faStar,faHandshake,faFaceSmile,faPizzaSlice,faFire,faBroom,faPlane)
 
 
 app.use(createPinia())

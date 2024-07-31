@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import Circle from "@/components/Circle.vue";
-import { ref, watch } from "vue";
-import { generateNumbers, formatTime } from "@/lib";
+import { h, onMounted, ref, watch , reactive } from "vue";
+import { generateNumbers } from "@/lib";
 import type { NumberObject, player } from "@/types";
 import { twMerge } from "tailwind-merge";
+import { useRoute, useRouter } from "vue-router";
 const props = defineProps({
   numPlayers: {
     type: Number,
@@ -20,100 +21,101 @@ const props = defineProps({
 });
 
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import PlayerTurn from "@/components/PlayerTurn.vue";
 
-const elements = ref<NumberObject[]>(generateNumbers(props.grid ** 2 / 2, 20));
-const selectedNumbers = ref<NumberObject[]>([]);
-const matchedPairs = ref<NumberObject[]>([]);
-const lastMatchedPair = ref<{ num1: string; num2: string } | null>(null);
-const matchedCount = ref(0);
-const moveCount = ref(0);
-const timer = ref(0);
-const currentPlayer = ref<number>(1);
 
-const players = ref<player[]>([
-  {
-    id: 1,
-    points: 0,
-  },
-  {
-    id: 2,
-    points: 0,
-  },
-  {
-    id: 3,
-    points: 0,
-  },
-  {
-    id: 4,
-    points: 0,
-  },
-]);
 
-function switchPlayer() {
-  if (currentPlayer.value < props.numPlayers) {
-    currentPlayer.value++;
-  } else {
-    currentPlayer.value = 1;
+// const elements = ref<NumberObject[]>(generateNumbers(props.grid ** 2 / 2, 20));
+// const selectedNumbers = ref<NumberObject[]>([]);
+// const matchedPairs = ref<NumberObject[]>([]);
+// const lastMatchedPair = ref<{ num1: string; num2: string } | null>(null);
+// const matchedCount = ref(0);
+// const moveCount = ref(0);
+const timer = ref({ hours: 0, minutes: 0, seconds: 0 });
+const player1 = reactive<player>({
+  elements: generateNumbers(props.grid ** 2 / 2, 20) ,
+  selectedNumbers: [],
+  matchedPairs: [],
+  lastMatchedPair: null,
+  matchedCount: 0,
+  moveCount: 0,
+  timer: { hours: 0, minutes: 0, seconds: 0 },
+});
+const player2 = ref();
+const player3 = ref(
+);
+const player4 = ref(
+);
+
+
+function updateTimer() {
+  const { hours, minutes, seconds } = player1.timer;
+  if (seconds < 59) {
+    player1.timer.seconds++;
+  } else if (minutes < 59) {
+    player1.timer.seconds = 0;
+    player1.timer.minutes++;
+  } else if (hours < 23) {
+    player1.timer.seconds = 0;
+    player1.timer.minutes = 0;
+    player1.timer.hours++;
   }
 }
-
 let timerInterval = setInterval(() => {
-  timer.value = timer.value + 1000;
+  updateTimer();
 }, 1000);
 
 function revealNumber(id: string) {
-  const number = elements.value.find((num) => num.id === id);
-  const isAlreadyMatched = matchedPairs.value.some((num) => num.id === id);
+  const number = player1.elements.find((num) => num.id === id);
+  const isAlreadyMatched = player1.matchedPairs.some((num) => num.id === id);
   if (number && number.variant !== "matched" && !isAlreadyMatched) {
-    const isAlreadySelected = selectedNumbers.value.some((num) => num.id === number.id);
+    const isAlreadySelected = player1.selectedNumbers.some((num) => num.id === number.id);
     if (!isAlreadySelected) {
-      moveCount.value++;
-      selectedNumbers.value.push(number);
+      player1.moveCount++;
+      player1.selectedNumbers.push(number);
     }
     number.variant = "visible";
     checkMatch();
   }
 }
 
-watch(lastMatchedPair, () => {
-  const { num1, num2 } = lastMatchedPair.value || {};
+watch(player1.matchedPairs, () => {
+  // console.log(player1.elements);
+  // const { num1, num2 } = player1.lastMatchedPair || {};
+  const num1 = player1.lastMatchedPair?.num1;
+  const num2 = player1.lastMatchedPair?.num2;
   if (num1 && num2) {
     unmarkNumbers();
     markMatched(num1);
     markMatched(num2);
   }
 });
-watch(matchedPairs.value, () => {
-  console.log(players.value);
+watch(player1.matchedPairs, () => {
   if (isAllMatched()) {
     clearInterval(timerInterval);
-    currentPlayer.value = currentPlayer.value + 1;
   }
 });
 
 function checkMatch() {
-  if (selectedNumbers.value.length === 2) {
-    switchPlayer();
-
-    const [first, second] = selectedNumbers.value;
+  if (player1.selectedNumbers.length === 2) {
+    const [first, second] = player1.selectedNumbers;
+    // console.log(first, second);
     if (first.value === second.value) {
-      matchedPairs.value.push(first, second);
-      lastMatchedPair.value = { num1: first.id, num2: second.id };
-      matchedCount.value++;
-      players.value[currentPlayer.value - 1].points++;
+      player1.matchedPairs.push(first, second);
+      player1.lastMatchedPair = { num1: first.id, num2: second.id };
+      player1.matchedCount++;
     } else {
       setTimeout(() => {
         first.variant = "hidden";
         second.variant = "hidden";
       }, 300);
     }
-    selectedNumbers.value = [];
+    player1.selectedNumbers = [];
   }
 }
 
 function markMatched(id: string) {
-  const number = elements.value.find((num) => num.id === id);
+  const number = player1.elements.find((num) => num.id === id);
+  console.log(number);
   if (number) {
     number.variant = "matched";
     number.matched = true;
@@ -121,18 +123,14 @@ function markMatched(id: string) {
 }
 
 function unmarkNumbers() {
-  elements.value.forEach((num) => {
+  player1.elements.forEach((num) => {
     if (num.variant === "matched") {
       num.variant = "visible";
     }
   });
 }
 function isAllMatched() {
-  console.log(players.value);
-  return elements.value.every((num) => num.matched);
-}
-function restartGame() {
-  location.reload();
+  return player1.elements.every((num) => num.matched);
 }
 </script>
 
@@ -142,7 +140,6 @@ function restartGame() {
       <h1 class="text-center text-darkBlue text-[32px] font-bold">memory</h1>
       <div class="flex gap-4">
         <button
-        @click="restartGame"
           class="bg-yellowOrange text-white rounded-3xl py-3.5 px-7 font-bold text-xl"
         >
           Restart
@@ -163,7 +160,7 @@ function restartGame() {
       "
     >
       <Circle
-        v-for="number in elements"
+        v-for="number in player1.elements"
         :theme="props.theme as 'numbers' | 'icons'"
         :key="number.id"
         :value="number.value"
@@ -175,33 +172,25 @@ function restartGame() {
           }
         "
       >
-        <div v-if="number.variant !== 'hidden'">
-          <p v-if="theme === 'numbers'">{{ number.value }}</p>
-          <font-awesome-icon v-else :icon="['fas', number.icon]" />
-        </div>
+      <div v-if="number.variant !== 'hidden'">
+        <p v-if="theme === 'numbers'" >{{ number.value }}</p>
+        <font-awesome-icon v-else :icon="['fas', number.icon]" />
+      </div>
       </Circle>
     </section>
-    <section v-if="props.numPlayers === 1" class="flex gap-[30px] mx-auto w-fit">
+    <section class="flex gap-[30px] mx-auto w-fit">
       <div
         class="flex justify-between items-center md:min-w-[255px] bg-darkLightGray p-5 rounded-[10px]"
       >
         <span class="text-blueDarkGray text-xl font-bold">Time</span>
-        <span class="text-tealBlue text-xl font-bold">{{ formatTime(timer) }}</span>
+        <span class="text-tealBlue text-xl font-bold">{{ player1.timer }}</span>
       </div>
       <div
         class="flex justify-between items-center md:min-w-[255px] bg-darkLightGray p-5 rounded-[10px]"
       >
         <span class="text-blueDarkGray text-xl font-bold">Moves</span>
-        <span class="text-tealBlue text-xl font-bold">{{ moveCount }}</span>
+        <span class="text-tealBlue text-xl font-bold">{{ player1.moveCount }}</span>
       </div>
-    </section>
-    <section v-else class="flex gap-6 mx-auto w-fit">
-      <PlayerTurn
-        v-for="i in props.numPlayers"
-        :player="i"
-        :point="players[i - 1].points"
-        :active="currentPlayer === i"
-      />
     </section>
   </main>
 </template>

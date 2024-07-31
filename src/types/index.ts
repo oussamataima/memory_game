@@ -3,12 +3,11 @@ export interface NumberObject {
   value: number;
   variant: string;
   matched : boolean
+  icon: string
 }
 
-export interface ArrayIds {
-  [key: string]: String;
+export interface player {
+  id: number
+  points: number;
 }
 
-export type  nameICon ={
-  name : 'futbolBall' | 'anchor' | 'sun' | 'handSpak' | 'bug' | 'moon' | 'snowFlake' | 'liraSign' | 'flask'
-} 
