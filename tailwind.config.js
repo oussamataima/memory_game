@@ -2,6 +2,22 @@
 export default {
   content: ["./index.html", "./src/**/*.{vue,js,ts,jsx,tsx}"],
   theme: {
+ 
+    container: {
+      center: true,
+      screens: {
+        sm: "640px",
+        md: "768px",
+        lg: "1024px",
+        xl: "1110px",
+      },
+      padding: {
+        DEFAULT: "1.5rem",
+        sm: "2rem",
+        md: "3.5rem",
+
+      }
+    },
     extend: {
       borderRadius: {
         "2xl": "20px",

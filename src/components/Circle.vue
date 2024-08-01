@@ -11,7 +11,7 @@ const props = defineProps<{
 const classes = computed(() => {
     const { variant , grid } = props;
     let v =  variant === "hidden" ? "bg-tealBlue" : variant === "visible" ? "bg-lightGray" : "bg-yellowOrange";
-    let g = grid == 4 ? "size-[118px]" : "size-[82px]";
+    let g = grid == 4 ? "size-[72px] md:size-[118px]" : "size-[47px] md:size-[82px] ";
     return g + " " + v
 })
 // watch(props, () => {
@@ -20,7 +20,7 @@ const classes = computed(() => {
 
 </script>
 <template>
-  <div :class="twMerge('size-auto text-[44px] text-white font-bold rounded-full flex justify-center items-center cursor-pointer', classes)">
+  <div :class="twMerge('size-auto text-2xl md:text-[44px] text-white font-bold rounded-full flex justify-center items-center cursor-pointer transition duration-200 ease-in-out', classes)">
     <!-- <p :if="theme ==='numbers'"></p> -->
      <slot/>
   </div>

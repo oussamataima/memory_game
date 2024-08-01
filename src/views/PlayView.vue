@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import Circle from "@/components/Circle.vue";
-import { ref, watch } from "vue";
+import Result from "@/components/Result.vue";
+import { computed, ref, watch } from "vue";
 import { generateNumbers, formatTime } from "@/lib";
 import type { NumberObject, player } from "@/types";
 import { twMerge } from "tailwind-merge";
+const router = useRouter();
 const props = defineProps({
   numPlayers: {
     type: Number,
@@ -21,6 +23,7 @@ const props = defineProps({
 
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import PlayerTurn from "@/components/PlayerTurn.vue";
+import { useRouter } from "vue-router";
 
 const elements = ref<NumberObject[]>(generateNumbers(props.grid ** 2 / 2, 20));
 const selectedNumbers = ref<NumberObject[]>([]);
@@ -30,25 +33,14 @@ const matchedCount = ref(0);
 const moveCount = ref(0);
 const timer = ref(0);
 const currentPlayer = ref<number>(1);
+const gameFinished = ref(false);
 
-const players = ref<player[]>([
-  {
-    id: 1,
+const players = ref<player[]>(
+  Array.from({ length: props.numPlayers }, (_, index) => ({
+    id: index + 1,
     points: 0,
-  },
-  {
-    id: 2,
-    points: 0,
-  },
-  {
-    id: 3,
-    points: 0,
-  },
-  {
-    id: 4,
-    points: 0,
-  },
-]);
+  }))
+);
 
 function switchPlayer() {
   if (currentPlayer.value < props.numPlayers) {
@@ -85,28 +77,28 @@ watch(lastMatchedPair, () => {
   }
 });
 watch(matchedPairs.value, () => {
-  console.log(players.value);
   if (isAllMatched()) {
     clearInterval(timerInterval);
-    currentPlayer.value = currentPlayer.value + 1;
+    gameFinished.value = true;
   }
 });
 
 function checkMatch() {
   if (selectedNumbers.value.length === 2) {
-    switchPlayer();
-
     const [first, second] = selectedNumbers.value;
     if (first.value === second.value) {
       matchedPairs.value.push(first, second);
       lastMatchedPair.value = { num1: first.id, num2: second.id };
       matchedCount.value++;
       players.value[currentPlayer.value - 1].points++;
+      switchPlayer();
     } else {
+      switchPlayer();
+
       setTimeout(() => {
         first.variant = "hidden";
         second.variant = "hidden";
-      }, 300);
+      }, 500);
     }
     selectedNumbers.value = [];
   }
@@ -128,37 +120,64 @@ function unmarkNumbers() {
   });
 }
 function isAllMatched() {
-  console.log(players.value);
   return elements.value.every((num) => num.matched);
 }
-function restartGame() {
-  location.reload();
+const classes = computed(() => {
+  if (props.grid === 4) {
+    return { a: "mt-[106px]", b: "mt-[126px]", c: "max-w-[532px]" };
+  } else {
+    return { a: "mt-[85px]", b: "mt-[102px]", c: "max-w-[572px]" };
+  }
+
+});
+
+function Restart() {
+  elements.value = generateNumbers(props.grid ** 2 / 2, 20);
+  selectedNumbers.value = [];
+  matchedPairs.value = [];
+  lastMatchedPair.value = null;
+  matchedCount.value = 0;
+  moveCount.value = 0;
+  timer.value = 0;
+  currentPlayer.value = 1;
+  gameFinished.value = false;
+  clearInterval(timerInterval);
+  timerInterval = setInterval(() => {
+    timer.value = timer.value + 1000;
+  }, 1000);
 }
+
 </script>
 
 <template>
-  <main class="max-w-[1110px] mx-auto">
+  <main class="container">
     <header class="flex justify-between items-center mt-8">
       <h1 class="text-center text-darkBlue text-[32px] font-bold">memory</h1>
       <div class="flex gap-4">
         <button
-        @click="restartGame"
-          class="bg-yellowOrange text-white rounded-3xl py-3.5 px-7 font-bold text-xl"
+          class="bg-yellowOrange text-white rounded-3xl py-3.5 px-7 font-bold text-xl hover:bg-[#FFB84A] transition"
+          @click="Restart"
         >
-          Restart
+          <span class="hidden md:block">Restart</span>
+          <font-awesome-icon class="md:hidden" :icon="['fas', 'rotate-right']" />
         </button>
         <button
-          class="bg-darkLightGray text-tealBlue rounded-3xl py-3.5 px-7 font-bold text-xl"
+          class="bg-darkLightGray text-tealBlue rounded-3xl py-3.5 px-7 font-bold text-xl hover:text-white hover:bg-darkerTealBlue transition"
+          @click="() => {
+            router.push({ name: 'home' });
+          }"
         >
-          New Game
+          <span class="hidden md:block">New Game</span>
+          <font-awesome-icon class="md:hidden" :icon="['fas', 'repeat']" />
         </button>
       </div>
     </header>
     <section
       :class="
         twMerge(
-          'flex gap-4 flex-wrap max-w-[572px] mx-auto my-16',
-          props.grid == 4 ? 'max-w-[532px]' : 'max-w-[  572px]'
+          'flex gap-3 md:gap-4 flex-wrap max-w-[572px] mx-auto mt-16',
+          classes.a,
+          classes.c
         )
       "
     >
@@ -181,7 +200,10 @@ function restartGame() {
         </div>
       </Circle>
     </section>
-    <section v-if="props.numPlayers === 1" class="flex gap-[30px] mx-auto w-fit">
+    <section
+      v-if="props.numPlayers === 1"
+      :class="twMerge('flex gap-6 mx-auto w-fit', classes.b)"
+    >
       <div
         class="flex justify-between items-center md:min-w-[255px] bg-darkLightGray p-5 rounded-[10px]"
       >
@@ -195,7 +217,7 @@ function restartGame() {
         <span class="text-tealBlue text-xl font-bold">{{ moveCount }}</span>
       </div>
     </section>
-    <section v-else class="flex gap-6 mx-auto w-fit">
+    <section v-else :class="twMerge('flex gap-6 mx-auto w-fit', classes.b)">
       <PlayerTurn
         v-for="i in props.numPlayers"
         :player="i"
@@ -203,6 +225,13 @@ function restartGame() {
         :active="currentPlayer === i"
       />
     </section>
+    <Result
+      v-if="gameFinished"
+      :players="players"
+      :time-elapsed="timer"
+      :moves-taken="moveCount"
+      :mode="props.numPlayers === 1 ? 'solo' : 'multi'"
+    />
   </main>
 </template>
 <style scoped>
