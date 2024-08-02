@@ -24,7 +24,7 @@ function changeNumPlayers(num: number) {
 
 <template>
   <main class="min-h-screen">
-    <header class="pt-14 pb-7">
+    <header class=" pb-7">
       <h1 class="text-center text-white text-[32px] font-bold">memory</h1>
     </header>
     <section
@@ -72,8 +72,8 @@ function changeNumPlayers(num: number) {
     </section>
   </main>
 </template>
-<style scoped>
+<style >
 body {
-  @apply bg-darkBlue;
+  background-color: #152938 !important;
 }
 </style>

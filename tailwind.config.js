@@ -15,6 +15,7 @@ export default {
         DEFAULT: "1.5rem",
         sm: "2rem",
         md: "3.5rem",
+        xl: "0",
 
       }
     },

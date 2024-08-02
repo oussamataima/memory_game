@@ -124,9 +124,9 @@ function isAllMatched() {
 }
 const classes = computed(() => {
   if (props.grid === 4) {
-    return { a: "mt-[106px]", b: "mt-[126px]", c: "max-w-[532px]" };
+    return { a: "mt-20", b: "mt-20", c: "max-w-[532px]" };
   } else {
-    return { a: "mt-[85px]", b: "mt-[102px]", c: "max-w-[572px]" };
+    return { a: "mt-20", b: "mt-20", c: "max-w-[572px]" };
   }
 
 });
@@ -141,6 +141,7 @@ function Restart() {
   timer.value = 0;
   currentPlayer.value = 1;
   gameFinished.value = false;
+  players.value = players.value.map((player) => ({ ...player, points: 0 }));
   clearInterval(timerInterval);
   timerInterval = setInterval(() => {
     timer.value = timer.value + 1000;
@@ -151,18 +152,18 @@ function Restart() {
 
 <template>
   <main class="container">
-    <header class="flex justify-between items-center mt-8">
+    <header class="flex justify-between items-center mt-6">
       <h1 class="text-center text-darkBlue text-[32px] font-bold">memory</h1>
       <div class="flex gap-4">
         <button
-          class="bg-yellowOrange text-white rounded-3xl py-3.5 px-7 font-bold text-xl hover:bg-[#FFB84A] transition"
+          class="bg-yellowOrange text-white rounded-3xl py-3 px-7 font-bold text-xl hover:bg-[#FFB84A] transition"
           @click="Restart"
         >
           <span class="hidden md:block">Restart</span>
           <font-awesome-icon class="md:hidden" :icon="['fas', 'rotate-right']" />
         </button>
         <button
-          class="bg-darkLightGray text-tealBlue rounded-3xl py-3.5 px-7 font-bold text-xl hover:text-white hover:bg-darkerTealBlue transition"
+          class="bg-darkLightGray text-tealBlue rounded-3xl py-3 px-7 font-bold text-xl hover:text-white hover:bg-darkerTealBlue transition"
           @click="() => {
             router.push({ name: 'home' });
           }"
@@ -175,9 +176,8 @@ function Restart() {
     <section
       :class="
         twMerge(
-          'flex gap-3 md:gap-4 flex-wrap max-w-[572px] mx-auto mt-16',
-          classes.a,
-          classes.c
+          'flex gap-2 md:gap-4 flex-wrap max-w-[327px]  mx-auto mt-16',
+          grid === 4 ? 'md:max-w-[532px]' : 'md:max-w-[572px]'
         )
       "
     >
@@ -202,22 +202,22 @@ function Restart() {
     </section>
     <section
       v-if="props.numPlayers === 1"
-      :class="twMerge('flex gap-6 mx-auto w-fit', classes.b)"
+      :class="twMerge('flex gap-6 mx-auto w-fit mb-6', classes.b)"
     >
       <div
-        class="flex justify-between items-center md:min-w-[255px] bg-darkLightGray p-5 rounded-[10px]"
+        class="flex flex-col md:flex-row justify-between gap-2 items-center md:min-w-[255px] bg-darkLightGray p-5 rounded-[10px] w-[150px] md:w-auto"
       >
         <span class="text-blueDarkGray text-xl font-bold">Time</span>
         <span class="text-tealBlue text-xl font-bold">{{ formatTime(timer) }}</span>
       </div>
       <div
-        class="flex justify-between items-center md:min-w-[255px] bg-darkLightGray p-5 rounded-[10px]"
+        class="flex flex-col md:flex-row justify-between gap-2 items-center md:min-w-[255px] bg-darkLightGray p-5 rounded-[10px] w-[150px] md:w-auto"
       >
         <span class="text-blueDarkGray text-xl font-bold">Moves</span>
         <span class="text-tealBlue text-xl font-bold">{{ moveCount }}</span>
       </div>
     </section>
-    <section v-else :class="twMerge('flex gap-6 mx-auto w-fit', classes.b)">
+    <section v-else :class="twMerge('flex gap-3 mx-auto w-fit mb-6', classes.b)">
       <PlayerTurn
         v-for="i in props.numPlayers"
         :player="i"
@@ -234,8 +234,8 @@ function Restart() {
     />
   </main>
 </template>
-<style scoped>
+<style >
 body {
-  background-color: #fcfcfc;
+  background-color: #fcfcfc !important;
 }
 </style>

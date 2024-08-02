@@ -1,7 +1,6 @@
 import './assets/main.css'
 
 import { createApp } from 'vue'
-import { createPinia } from 'pinia'
 
 /* import the fontawesome core */
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -16,7 +15,7 @@ import { faFutbol,  faAnchor, faFlask, faSun, faHandSpock, faBug, faMoon, faSnow
 
 import App from './App.vue'
 import router from './router'
-import { faHandSparkles } from '@fortawesome/free-solid-svg-icons/faHandSparkles'
+
 
 const app = createApp(App)
 
@@ -24,7 +23,6 @@ const app = createApp(App)
 library.add(faFutbol,faAnchor,faFlask,faSun,faHandSpock,faBug,faMoon,faSnowflake,faLiraSign,faCar,faCat,faStar,faHandshake,faFaceSmile,faPizzaSlice,faFire,faBroom,faPlane,faRepeat,faRotateRight)
 
 
-app.use(createPinia())
 app.component('font-awesome-icon', FontAwesomeIcon)
 app.use(router)
 app.mount('#app')
