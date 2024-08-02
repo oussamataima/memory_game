@@ -76,10 +76,11 @@ watch(lastMatchedPair, () => {
     markMatched(num2);
   }
 });
-watch(matchedPairs.value, () => {
+watch(lastMatchedPair, () => {
   if (isAllMatched()) {
-    clearInterval(timerInterval);
+
     gameFinished.value = true;
+    clearInterval(timerInterval);
   }
 });
 
@@ -130,6 +131,10 @@ const classes = computed(() => {
   }
 
 });
+
+const showResult =  computed(() => {
+  return gameFinished.value === true
+})
 
 function Restart() {
   gameFinished.value = false;
@@ -227,7 +232,8 @@ function Restart() {
       />
     </section>
     <Result
-      v-if="gameFinished"
+      @restart="Restart"
+      v-if="showResult"
       :players="players"
       :time-elapsed="timer"
       :moves-taken="moveCount"

@@ -14,6 +14,7 @@ const props = defineProps<{
   movesTaken: number;
   mode: string
 }>();
+defineEmits(['restart'])
 
 function determineWinner() {
   let maxPoints = -Infinity;
@@ -100,6 +101,7 @@ const result = computed(()=>{
     <div class="flex flex-col gap-4 md:flex-row md:gap-3.5">
       <button
         class="bg-yellowOrange text-white rounded-3xl pt-3 pb-3.5 flex justify-center items-center w-full font-bold text-xl hover:bg-[#FFB84A] transition"
+        @click="$emit('restart')"
       >
         Restart
       </button>
