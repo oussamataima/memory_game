@@ -8,12 +8,9 @@ This is a solution to the [Memory game challenge on Frontend Mentor](https://www
   - [The challenge](#the-challenge)
   - [Screenshot](#screenshot)
   - [Links](#links)
-- [My process](#my-process)
   - [Built with](#built-with)
   - [What I learned](#what-i-learned)
   - [Useful resources](#useful-resources)
-- [Author](#author)
-- [Acknowledgments](#acknowledgments)
 
 ## Overview
 
@@ -35,12 +32,7 @@ Users should be able to:
 
 - Live Site URL: [live site URL](https://memory-game-nu-roan.vercel.app/)
 
-## My process
 
-1. create test first approches (TDD)
-2. implements logic without styling
-3. add styling mobile first (no test to validate styling)
-4. add media queries for responsiveness
 
 ### Built with
 
