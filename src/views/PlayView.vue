@@ -132,6 +132,7 @@ const classes = computed(() => {
 });
 
 function Restart() {
+  gameFinished.value = false;
   elements.value = generateNumbers(props.grid ** 2 / 2, 20);
   selectedNumbers.value = [];
   matchedPairs.value = [];
