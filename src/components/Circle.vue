@@ -18,7 +18,6 @@ const classes = computed(() => {
 </script>
 <template>
   <div :class="twMerge('size-auto text-2xl md:text-[44px] text-white font-bold rounded-full flex justify-center items-center cursor-pointer transition duration-200 ease-in-out', classes)">
-    <!-- <p :if="theme ==='numbers'"></p> -->
      <slot/>
   </div>
 </template>

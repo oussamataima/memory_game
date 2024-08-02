@@ -29,7 +29,7 @@ Users should be able to:
 
 ### Screenshot
 
-![demo](./images/memory-challenge-small.gif) ![demo](./images/memory-challenge-2-small.gif)
+![demo](./public/solo_num.png) ![demo](./public/multi_num.png) ![demo](./public/6x6.png) ![demo](./public/solo_icons.png) ![demo](./public/endGame.png)
 
 ### Links
 
