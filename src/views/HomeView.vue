@@ -24,7 +24,7 @@ function changeNumPlayers(num: number) {
 
 <template>
   <main class="min-h-screen">
-    <header class=" pb-7">
+    <header class=" py-7">
       <h1 class="text-center text-white text-[32px] font-bold">memory</h1>
     </header>
     <section
