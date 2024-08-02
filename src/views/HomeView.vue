@@ -23,7 +23,7 @@ function changeNumPlayers(num: number) {
 </script>
 
 <template>
-  <main class="min-h-screen">
+  <main class="min-h-screen bg-darkBlue">
     <header class=" py-7">
       <h1 class="text-center text-white text-[32px] font-bold">memory</h1>
     </header>
@@ -73,7 +73,5 @@ function changeNumPlayers(num: number) {
   </main>
 </template>
 <style >
-body {
-  background-color: #152938 !important;
-}
+
 </style>

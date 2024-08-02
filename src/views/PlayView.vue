@@ -234,7 +234,7 @@ function Restart() {
     />
   </main>
 </template>
-<style >
+<style  >
 body {
   background-color: #fcfcfc !important;
 }
