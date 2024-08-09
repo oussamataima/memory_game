@@ -23,12 +23,12 @@ function changeNumPlayers(num: number) {
 </script>
 
 <template>
-  <main class="min-h-screen bg-darkBlue pb-20">
+  <main class="min-h-screen bg-darkBlue pb-20 px-4">
     <header class="py-7">
       <h1 class="text-center text-white text-[32px] font-bold">memory</h1>
     </header>
     <section
-      class="bg-white rounded-3xl p-6 md:p-14 max-w-[654px] mx-auto flex flex-col gap-6 md:gap-8 ">
+      class="bg-white rounded-3xl p-6 md:p-14 max-w-[654px] mx-auto flex flex-col gap-6 md:gap-8">
       <div class="flex flex-col gap-2.5">
         <h2 class="text-blueGray text-[15px] font-bold md:text-xl">Select Theme</h2>
         <div class="flex gap-2.5 md:gap-[30px]">

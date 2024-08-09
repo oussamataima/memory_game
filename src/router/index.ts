@@ -15,11 +15,6 @@ const router = createRouter({
       component: () => import('../views/PlayView.vue'),
       props: (route) => ({grid: Number(route.query.grid) || 4, theme: String(route.query.theme) || "numbers", numPlayers: Number(route.query.numPlayers) || 1}),
     },
-    {
-      path: '/test',
-      name: 'test',
-      component: () => import('../views/TestView.vue'),
-    }
   ]
 })
 
