@@ -125,9 +125,9 @@ function isAllMatched() {
 }
 const classes = computed(() => {
   if (props.grid === 4) {
-    return { a: "mt-20", b: "mt-20", c: "max-w-[532px]" };
+    return { a: "mt-12", b: "mt-12", c: "max-w-[532px]" };
   } else {
-    return { a: "mt-20", b: "mt-20", c: "max-w-[572px]" };
+    return { a: "mt-12", b: "mt-12", c: "max-w-[572px]" };
   }
 
 });
@@ -182,7 +182,7 @@ function Restart() {
     <section
       :class="
         twMerge(
-          'flex gap-2 md:gap-4 flex-wrap max-w-[327px]  mx-auto mt-16',
+          'flex gap-2 md:gap-4 flex-wrap max-w-[327px]  mx-auto mt-8',
           grid === 4 ? 'md:max-w-[532px]' : 'md:max-w-[572px]'
         )
       "
